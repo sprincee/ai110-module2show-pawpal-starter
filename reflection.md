@@ -4,6 +4,10 @@
 
 **a. Initial design**
 
+1. Add a pet — register a pet with name, species, and age
+2. Schedule a task — assign a care activity (walk, feeding, medication) to a pet at a specific time and date
+3. View today's schedule — see all tasks due today sorted by time, and mark them complete
+
 - Briefly describe your initial UML design.
 - What classes did you include, and what responsibilities did you assign to each?
 
