@@ -1,43 +1,101 @@
-# PawPal+ (Module 2 Project)
+# PawPal+
 
-You are building **PawPal+**, a Streamlit app that helps a pet owner plan care tasks for their pet.
+A smart pet care management system that helps owners keep their pets happy and healthy. Built with Python OOP and Streamlit.
 
-## Scenario
+---
 
-A busy pet owner needs help staying consistent with pet care. They want an assistant that can:
+## Demo
 
-- Track pet care tasks (walks, feeding, meds, enrichment, grooming, etc.)
-- Consider constraints (time available, priority, owner preferences)
-- Produce a daily plan and explain why it chose that plan
+> ![alt text](image.png)
 
-Your job is to design the system first (UML), then implement the logic in Python, then connect it to the Streamlit UI.
+---
 
-## What you will build
+## Features
 
-Your final app should:
+- **Pet Management** — Add and remove pets with name, species, and age
+- **Task Scheduling** — Schedule feedings, walks, medications, and appointments with a specific time and date
+- **Sorting by Time** — Tasks are always displayed in chronological order
+- **Filtering** — Filter tasks by pet name or completion status
+- **Recurring Tasks** — Mark a daily or weekly task complete and the next occurrence is automatically created using timedelta
+- **Conflict Detection** — The scheduler warns you when two tasks are booked at the same time on the same day
+- **Today's Schedule** — A focused view of only today's tasks, sorted and actionable
 
-- Let a user enter basic owner + pet info
-- Let a user add/edit tasks (duration + priority at minimum)
-- Generate a daily schedule/plan based on constraints and priorities
-- Display the plan clearly (and ideally explain the reasoning)
-- Include tests for the most important scheduling behaviors
+---
 
-## Getting started
+## Project Structure
+```
+pawpal/
+├── pawpal_system.py        # Core logic: Owner, Pet, Task, Scheduler
+├── app.py                  # Streamlit UI
+├── main.py                 # CLI demo script
+├── tests/
+│   └── test_pawpal.py      # Automated pytest suite (16 tests)
+├── uml_draft.png           # UML class diagram
+├── README.md
+└── reflection.md
+```
 
-### Setup
+---
 
-```bash
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+## Getting Started
+
+### Install dependencies
+```
 pip install -r requirements.txt
 ```
 
-### Suggested workflow
+### Run the Streamlit app
+```
+python -m streamlit run app.py
+```
 
-1. Read the scenario carefully and identify requirements and edge cases.
-2. Draft a UML diagram (classes, attributes, methods, relationships).
-3. Convert UML into Python class stubs (no logic yet).
-4. Implement scheduling logic in small increments.
-5. Add tests to verify key behaviors.
-6. Connect your logic to the Streamlit UI in `app.py`.
-7. Refine UML so it matches what you actually built.
+### Run the CLI demo
+```
+python main.py
+```
+
+---
+
+## Smarter Scheduling
+
+PawPal+ implements four algorithmic features in the Scheduler class:
+
+| Feature | Method | Approach |
+|---|---|---|
+| Chronological sort | `sort_by_time()` | `sorted()` with `lambda t: t.time` on HH:MM strings |
+| Status filter | `filter_by_status()` | List comprehension on `task.completed` |
+| Pet filter | `filter_by_pet()` | Case-insensitive name match |
+| Conflict detection | `detect_conflicts()` | Groups tasks by `(time, date)` tuple, flags groups with more than one task |
+| Recurring tasks | `mark_task_complete()` | `timedelta(days=1)` or `timedelta(weeks=1)` added to `due_date` |
+
+---
+
+## Testing PawPal+
+
+Run the full test suite:
+```
+python -m pytest tests/test_pawpal.py -v
+```
+
+The suite covers:
+
+- Task completion and addition
+- Daily, weekly, and one-time recurrence logic
+- Scheduler integration for recurring tasks
+- Sorting correctness
+- Filtering by status and pet name
+- Conflict detection with and without overlaps
+- Owner and pet management including edge cases
+
+**Confidence level: 5/5 — 16/16 tests passing**
+
+---
+
+## Architecture
+```
+app.py (UI)
+    imports
+pawpal_system.py (Logic)
+    Owner -> holds Pets -> hold Tasks
+    Scheduler -> queries Owner, operates on Tasks
+```
